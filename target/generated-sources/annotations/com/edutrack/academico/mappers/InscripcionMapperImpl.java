@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-12-01T09:03:46-0400",
-    comments = "version: 1.6.0.Beta1, compiler: javac, environment: Java 17.0.16 (Microsoft)"
+    date = "2025-12-01T13:29:40-0400",
+    comments = "version: 1.6.0.Beta1, compiler: Eclipse JDT (IDE) 3.44.0.v20251118-1623, environment: Java 21.0.9 (Eclipse Adoptium)"
 )
 @Component
 public class InscripcionMapperImpl implements InscripcionMapper {
@@ -21,8 +21,8 @@ public class InscripcionMapperImpl implements InscripcionMapper {
 
         InscripcionDTO inscripcionDTO = new InscripcionDTO();
 
-        inscripcionDTO.setIdInscripcion( inscripcion.getIdInscripcion() );
         inscripcionDTO.setFecha( inscripcion.getFecha() );
+        inscripcionDTO.setIdInscripcion( inscripcion.getIdInscripcion() );
 
         mapExtraData( inscripcion, inscripcionDTO );
 
