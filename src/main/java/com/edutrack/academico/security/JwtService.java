@@ -1,11 +1,11 @@
 package com.edutrack.academico.security;
 
-import io.github.cdimascio.dotenv.Dotenv;
 import io.jsonwebtoken.Claims;
 import io.jsonwebtoken.Jwts;
 import io.jsonwebtoken.io.Decoders;
 import io.jsonwebtoken.security.Keys;
 import jakarta.annotation.PostConstruct;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.security.core.userdetails.UserDetails;
 import org.springframework.stereotype.Service;
 
@@ -18,30 +18,23 @@ import java.util.function.Function;
 @Service
 public class JwtService {
 
-    private final Dotenv dotenv = Dotenv.configure()
-            .ignoreIfMissing()
-            .load();
+    @Value("${JWT_SECRET}")
+    private String jwtSecret;
 
     private Key key;
 
     @PostConstruct
     public void initKey() {
-        String secret = null;
-
-        try {
-            secret = dotenv.get("JWT_SECRET");
-        } catch (Exception ignored) {
+        if (jwtSecret == null || jwtSecret.isBlank()) {
+            // Intenta obtener de la variable de entorno si @Value falla
+            jwtSecret = System.getenv("JWT_SECRET");
         }
 
-        if (secret == null || secret.isBlank()) {
-            secret = System.getenv("JWT_SECRET");
-        }
-
-        if (secret == null || secret.isBlank()) {
+        if (jwtSecret == null || jwtSecret.isBlank()) {
             throw new IllegalStateException("No se encontró JWT_SECRET.");
         }
 
-        byte[] keyBytes = Decoders.BASE64.decode(secret.trim());
+        byte[] keyBytes = Decoders.BASE64.decode(jwtSecret.trim());
         if (keyBytes.length < 32) {
             throw new IllegalStateException("JWT_SECRET debe ser al menos 256 bits (32 bytes).");
         }
@@ -81,7 +74,7 @@ public class JwtService {
                 .setClaims(claims)
                 .setSubject(userDetails.getUsername())
                 .setIssuedAt(new Date(System.currentTimeMillis()))
-                .setExpiration(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000))
+                .setExpiration(new Date(System.currentTimeMillis() + 24 * 60 * 60 * 1000)) // 24h
                 .signWith(getKey())
                 .compact();
     }
@@ -96,4 +89,3 @@ public class JwtService {
         return expiration.before(new Date());
     }
 }
-

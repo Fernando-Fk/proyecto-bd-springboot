@@ -1,15 +1,14 @@
-# ---------- STAGE 1: Build ----------
-FROM eclipse-temurin:17-jdk AS build
-WORKDIR /app
-COPY . .
-RUN chmod +x mvnw
-RUN ./mvnw clean package -DskipTests
+# Usamos JDK 17
+FROM eclipse-temurin:17-jdk
 
-# ---------- STAGE 2: Run ----------
-FROM eclipse-temurin:17-jre
+# Carpeta de trabajo
 WORKDIR /app
 
-COPY --from=build /app/target/*.jar app.jar
+# Copiamos el JAR generado
+COPY target/edutrack-backend-0.0.1-SNAPSHOT.jar app.jar
 
+# Exponemos el puerto que Render asigna dinámicamente
 EXPOSE 8080
-CMD ["java", "-jar", "app.jar"]
+
+# Ejecutamos el JAR leyendo el puerto de Render
+CMD ["sh", "-c", "java -Dserver.port=$PORT -jar app.jar"]

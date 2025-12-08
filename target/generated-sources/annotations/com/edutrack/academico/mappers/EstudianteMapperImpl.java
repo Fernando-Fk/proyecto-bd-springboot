@@ -7,8 +7,8 @@ import org.springframework.stereotype.Component;
 
 @Generated(
     value = "org.mapstruct.ap.MappingProcessor",
-    date = "2025-12-01T13:29:41-0400",
-    comments = "version: 1.6.0.Beta1, compiler: Eclipse JDT (IDE) 3.44.0.v20251118-1623, environment: Java 21.0.9 (Eclipse Adoptium)"
+    date = "2025-12-08T13:04:43-0400",
+    comments = "version: 1.5.5.Final, compiler: javac, environment: Java 17.0.16 (Microsoft)"
 )
 @Component
 public class EstudianteMapperImpl implements EstudianteMapper {
@@ -21,13 +21,13 @@ public class EstudianteMapperImpl implements EstudianteMapper {
 
         EstudianteDTO estudianteDTO = new EstudianteDTO();
 
+        estudianteDTO.setIdEstudiante( estudiante.getIdEstudiante() );
+        estudianteDTO.setNombre( estudiante.getNombre() );
         estudianteDTO.setApellido( estudiante.getApellido() );
         estudianteDTO.setEmail( estudiante.getEmail() );
         if ( estudiante.getEstado() != null ) {
             estudianteDTO.setEstado( estudiante.getEstado().name() );
         }
-        estudianteDTO.setIdEstudiante( estudiante.getIdEstudiante() );
-        estudianteDTO.setNombre( estudiante.getNombre() );
 
         mapEstado( estudiante, estudianteDTO );
 
@@ -42,10 +42,10 @@ public class EstudianteMapperImpl implements EstudianteMapper {
 
         Estudiante estudiante = new Estudiante();
 
-        estudiante.setApellido( dto.getApellido() );
-        estudiante.setEmail( dto.getEmail() );
         estudiante.setIdEstudiante( dto.getIdEstudiante() );
         estudiante.setNombre( dto.getNombre() );
+        estudiante.setApellido( dto.getApellido() );
+        estudiante.setEmail( dto.getEmail() );
 
         estudiante.setEstado( toEstadoEnum(dto.getEstado()) );
 
